@@ -68,8 +68,55 @@ class Message {
       consola.success(text);
     } else if (variant === 'error') {
       consola.error(text);
-    } else {
+    } else if (variant === 'info') {
       consola.info(text);
+    }
+  }
+}
+
+interface User {
+  name: string;
+  age: number;
+}
+
+class UsersData {
+  data: User[];
+
+  constructor() {
+    this.data = [];
+  }
+
+  public showAll(): void {
+    Message.showColorized(MessageVariant.Info, 'Users data');
+    if (this.data.length === 0) {
+      console.log('No data...');
+    } else {
+      console.table(this.data);
+    }
+  }
+
+  public add(user: User): void {
+    if (user.name.length > 0 && user.age > 0 && user.age < 140) {
+      this.data.push(user);
+      Message.showColorized(
+        MessageVariant.Success,
+        'User has been successfully added!'
+      );
+    } else {
+      Message.showColorized(MessageVariant.Error, 'Wrong data!');
+    }
+  }
+
+  public remove(userName: string): void {
+    const index = this.data.findIndex((user) => {
+      return userName === user.name;
+    });
+
+    if (index === -1) {
+      Message.showColorized(MessageVariant.Error, 'User not found...');
+    } else {
+      this.data.splice(index, 1);
+      Message.showColorized(MessageVariant.Success, 'User deleted!');
     }
   }
 }
